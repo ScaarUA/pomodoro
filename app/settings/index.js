@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text} from'react-native';
-import {changeHeaderColor} from "../header/actions";
+import {changeHeaderColor} from "../../header/actions";
 
 class Settings extends Component {
     componentDidMount() {

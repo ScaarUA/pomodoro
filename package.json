@@ -19,13 +19,13 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "expo": "^25.0.0",
+    "expo": "^26.0.0",
     "react": "16.2.0",
-    "react-native": "0.52.0",
+    "react-native": "0.54.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-hamburger": "0.0.2",
-    "react-navigation": "^1.1.2",
-    "react-navigation-redux-helpers": "^1.0.1",
+    "react-navigation": "^1.5.9",
+    "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2"
   }

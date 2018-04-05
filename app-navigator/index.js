@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {StackNavigator} from 'react-navigation';
-import Goals from '../goals';
+import Goals from '../app/goals/index';
 import {createReactNavigationReduxMiddleware, createReduxBoundAddListener} from "react-navigation-redux-helpers";
 import {addNavigationHelpers} from "react-navigation";
-import Header from '../header';
-import Settings from '../settings';
+import Header from '../header/index';
+import Settings from '../app/settings/index';
 
 export const navigatorMiddleware = createReactNavigationReduxMiddleware(
     "root",

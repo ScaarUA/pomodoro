@@ -12,13 +12,14 @@ class Header extends Component {
 
     render() {
         const {title, drawer, header, openDrawer} = this.props;
-        const stateStyle = {
+		const stateStyle = {
             backgroundColor: header.backgroundColor
         };
-        return (
+		console.log(drawer.active);
+		return (
             <View style={[styles.container, stateStyle]}>
                 <Hamburger
-                    active={drawer.active}
+                    active={false}
                     onPress={openDrawer}
                 />
                 <Text
@@ -28,7 +29,7 @@ class Header extends Component {
                 </Text>
             </View>
         );
-    }
+	}
 }
 
 function mapStateToProps({drawer, header}) {

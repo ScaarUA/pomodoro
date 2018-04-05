@@ -11,8 +11,8 @@ class Drawer extends Component {
         this.saveDrawer = this.saveDrawer.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.drawer.active) {
+    componentDidUpdate() {
+        if (this.props.drawer.active) {
             this.drawer.openDrawer();
         } else {
             this.drawer.closeDrawer();

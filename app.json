@@ -4,7 +4,7 @@
     "icon": "./logo.png",
     "version": "0.1.0",
     "slug": "test",
-    "sdkVersion": "25.0.0",
+    "sdkVersion": "26.0.0",
     "android": {
       "package": "com.bhuseinov.test"
     }
