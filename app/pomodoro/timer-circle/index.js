@@ -40,6 +40,10 @@ export default class TimerCircle extends Component {
 	}
 
 	onAppStateChange = appState => {
+		if (!this.timingInterval) {
+			return;
+		}
+
 		if (appState === 'background') {
 			this.pausedDate = new Date().getTime();
 		} else if (appState === 'active' && this.pausedDate) {
@@ -52,6 +56,7 @@ export default class TimerCircle extends Component {
 
 	pauseTimer = () => {
 		clearInterval(this.timingInterval);
+		this.timingInterval = null;
 		this.animation.stop();
 	};
 
