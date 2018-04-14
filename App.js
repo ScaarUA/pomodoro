@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {StyleSheet, StatusBar, View} from 'react-native';
 import {Provider} from 'react-redux';
-import {Font} from 'expo';
+import {Font, Permissions} from 'expo';
 import store from './store';
 import AppNavigator from './app-navigator';
-import Header from './header';
 import Drawer from './drawer';
+import {getSettings} from './app/settings/actions'
 
 export default class App extends Component {
     constructor(props) {
@@ -19,10 +19,13 @@ export default class App extends Component {
         await Font.loadAsync({
             'FontAwesome': require('./assets/fonts/fontawesome-webfont.ttf')
         });
+		Permissions.askAsync(Permissions.NOTIFICATIONS);
 
         this.setState({
             fontLoaded: true
-        })
+        });
+
+        store.dispatch(getSettings());
     }
 
     render() {

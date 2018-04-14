@@ -20,13 +20,16 @@
   },
   "dependencies": {
     "expo": "^26.0.0",
+    "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "0.54.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-hamburger": "0.0.2",
+    "react-native-progress-circle": "^2.0.0",
     "react-navigation": "^1.5.9",
     "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {StackNavigator} from 'react-navigation';
-import Goals from '../app/goals/index';
+import Pomodoro from '../app/pomodoro/index';
 import {createReactNavigationReduxMiddleware, createReduxBoundAddListener} from "react-navigation-redux-helpers";
 import {addNavigationHelpers} from "react-navigation";
 import Header from '../header/index';
@@ -15,8 +15,8 @@ export const navigatorMiddleware = createReactNavigationReduxMiddleware(
 const addListener = createReduxBoundAddListener("root");
 
 export const Navigator = StackNavigator({
-    'Goals': {
-        screen: Goals
+    'Pomodoro': {
+        screen: Pomodoro
     },
     'Settings': {
         screen: Settings
@@ -27,7 +27,7 @@ export const Navigator = StackNavigator({
     })
 });
 
-const AppNavigator = ({dispatch, nav}) => (
+const AppNavigator = ({dispatch, nav, dataLoaded}) => dataLoaded && (
     <Navigator
         navigation={addNavigationHelpers({
             dispatch: dispatch,
@@ -37,8 +37,9 @@ const AppNavigator = ({dispatch, nav}) => (
     />
 );
 
-const mapStateToProps = ({nav}) => ({
-    nav
+const mapStateToProps = ({nav, settings}) => ({
+    nav,
+    dataLoaded: settings // && other data
 });
 
 export default connect(mapStateToProps)(AppNavigator);

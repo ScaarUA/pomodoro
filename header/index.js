@@ -15,7 +15,7 @@ class Header extends Component {
 		const stateStyle = {
             backgroundColor: header.backgroundColor
         };
-		console.log(drawer.active);
+
 		return (
             <View style={[styles.container, stateStyle]}>
                 <Hamburger

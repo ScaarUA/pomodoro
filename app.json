@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Test",
+    "name": "Pomodoro",
     "icon": "./logo.png",
-    "version": "0.1.0",
-    "slug": "test",
+    "version": "0.1.1",
+    "slug": "pomodoro",
     "sdkVersion": "26.0.0",
     "android": {
-      "package": "com.bhuseinov.test"
+      "package": "com.bhuseinov.pomodoro"
     }
   }
 }

@@ -26,7 +26,7 @@ class NavigationList extends Component {
     }
 
     goToMain() {
-        this.goTo('Goals');
+        this.goTo('Pomodoro');
     }
 
     goToSettings() {
