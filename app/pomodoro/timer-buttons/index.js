@@ -5,6 +5,8 @@ import {Notifications} from 'expo';
 import styles from './styles';
 import {STATES, STAGES} from '../constants';
 
+let notificationId;
+
 export default class TimerButtons extends Component {
 	startTimer = () => {
 		this.props.getTimer().start();
@@ -26,12 +28,12 @@ export default class TimerButtons extends Component {
 	};
 
 	async scheduleNotification() {
-		const time = new Date().getTime() + this.props.getTimer().getTime();
+		const time = new Date().getTime() + this.props.time;
 		const message = this.props.pomodoroStage === STAGES.WORK ?
 			'Work finished. Lets have some break' :
 			'Break finished. Lets continue working';
 
-		this.notificationId = await Notifications.scheduleLocalNotificationAsync({
+		notificationId = await Notifications.scheduleLocalNotificationAsync({
 			title: 'Pomodoro',
 			body: message,
 			android: {
@@ -43,13 +45,13 @@ export default class TimerButtons extends Component {
 	}
 
 	dismissNotification() {
-		if (this.notificationId) {
-			Notifications.dismissNotificationAsync(this.notificationId);
+		if (notificationId) {
+			Notifications.dismissNotificationAsync(notificationId);
 		}
 	}
 
 	cancelNotification() {
-		Notifications.cancelScheduledNotificationAsync(this.notificationId);
+		Notifications.cancelScheduledNotificationAsync(notificationId);
 	}
 
 	showStopButton() {

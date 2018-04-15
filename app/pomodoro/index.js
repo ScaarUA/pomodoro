@@ -1,50 +1,53 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Button, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import TimerCircle from './timer-circle/index';
 import {STAGES, STATES} from './constants';
 import styles from './styles';
-import {changeTimerState, changeTimerStage} from './actions';
+import {changePomodoroState, changePomodoroStage, changePomodoroTime} from './actions';
 import TimerButtons from './timer-buttons';
 
+let timerRef;
+
 class Goals extends Component {
-	onTimerFinished = () => {
-        const {stage} = this.props.pomodoro;
-
-        this.props.changeTimerState(STATES.STOPPED);
-        this.props.changeTimerStage(stage === STAGES.WORK ? STAGES.BREAK : STAGES.WORK);
-    };
-
-    getStageLength() {
-		const {pomodoroLength, breakLength, pomodoro} = this.props;
-
-		switch (pomodoro.stage) {
-            case STAGES.WORK:
-                return pomodoroLength;
-            case STAGES.BREAK:
-                return breakLength;
-        }
+	componentWillUnmount() {
+		if (this.props.state === STATES.STOPPED) {
+			this.resetTimer();
+		}
 	}
 
+	onTimerFinished = () => {
+        const {stage, changePomodoroState, changePomodoroStage} = this.props;
+
+        changePomodoroState(STATES.STOPPED);
+        changePomodoroStage(stage === STAGES.WORK ? STAGES.BREAK : STAGES.WORK);
+    };
+
+	resetTimer = () => {
+		this.props.changePomodoroTime(null);
+	};
+
     render() {
-    	const {pomodoro, changeTimerState} = this.props;
-        const length = this.getStageLength();
+    	const {state, stage, time, changePomodoroState, changePomodoroTime} = this.props;
 
 		return (
             <View style={styles.container}>
-				<Text style={styles.title}>{pomodoro.stage}</Text>
+				<Text style={styles.title}>{stage}</Text>
 				<Text style={styles.subtitle}>Do some work effectively</Text>
                 <TimerCircle
-                    amount={length}
-                    instance={(timer) => this.timer = timer}
+					time={time}
+                    instance={(timer) => timerRef = timer}
                     onTimerFinished={this.onTimerFinished}
+					onTimerTick={changePomodoroTime}
+					onTimerStop={this.resetTimer}
                 />
                 <View style={styles.buttonsContainer}>
                     <TimerButtons
-						pomodoroState={pomodoro.state}
-						pomodoroStage={pomodoro.stage}
-						changeTimerState={changeTimerState}
-						getTimer={() => this.timer}
+						pomodoroState={state}
+						pomodoroStage={stage}
+						changeTimerState={changePomodoroState}
+						getTimer={() => timerRef}
+						time={time}
 					/>
                 </View>
             </View>
@@ -52,15 +55,29 @@ class Goals extends Component {
     }
 }
 
-const mapStateToProps = ({settings, pomodoro}) => ({
-    pomodoroLength: settings.pomodoroLength,
-    breakLength: settings.breakLength,
-    pomodoro
-});
+const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {state, stage, time}}) => {
+	let stageLength;
+
+	switch (stage) {
+		case STAGES.WORK:
+			stageLength = pomodoroLength;
+			break;
+		case STAGES.BREAK:
+			stageLength = breakLength;
+			break;
+	}
+
+	return {
+		state,
+		stage,
+		time: time !== null ? time : stageLength
+	};
+};
 
 const mapDispatchToProps = dispatch => ({
-	changeTimerState: state => dispatch(changeTimerState(state)),
-	changeTimerStage: state => dispatch(changeTimerStage(state))
+	changePomodoroState: state => dispatch(changePomodoroState(state)),
+	changePomodoroStage: stage => dispatch(changePomodoroStage(stage)),
+	changePomodoroTime: time => dispatch(changePomodoroTime(time)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Goals);

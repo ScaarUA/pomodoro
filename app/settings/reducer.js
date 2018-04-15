@@ -2,8 +2,8 @@ import {AsyncStorage} from 'react-native';
 import {SETTINGS_CHANGE} from './actions';
 
 export const defaultState = {
-	pomodoroLength: 25,
-	breakLength: 5
+	pomodoroLength: 25 * 60 * 1000,
+	breakLength: 5 * 60 * 1000
 };
 
 export default function(state = null, {type, payload}) {

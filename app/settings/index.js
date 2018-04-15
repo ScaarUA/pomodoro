@@ -4,8 +4,8 @@ import {changeHeaderColor} from "../../header/actions";
 import {changeSettings} from './actions';
 import {connect} from 'react-redux';
 
-const pomodoroLengths = [25, 30, 35, 40, 45];
-const breakLengths = [5, 7.5, 10];
+const pomodoroLengths = [0.5, 25, 30, 35, 40, 45];
+const breakLengths = [0.2, 5, 7.5, 10];
 
 class Settings extends Component {
     componentDidMount() {
@@ -31,7 +31,7 @@ class Settings extends Component {
                     prompt="Pomodoro length"
                 >
 					{pomodoroLengths.map(length => (
-                        <Picker.Item key={length} label={`${length} minutes`} value={length} />
+                        <Picker.Item key={length} label={`${length} minutes`} value={length * 60 * 1000} />
 					))}
                 </Picker>
                 <Picker
@@ -41,7 +41,7 @@ class Settings extends Component {
                     prompt="Break length"
                 >
 					{breakLengths.map(length => (
-                        <Picker.Item key={length} label={`${length} minutes`} value={length} />
+                        <Picker.Item key={length} label={`${length} minutes`} value={length * 60 * 1000} />
 					))}
                 </Picker>
             </View>
