@@ -73,7 +73,7 @@ export default class TimerCircle extends Component {
 		this.props.onTimerStop();
 	};
 
-	launchTimer = (duration = this.props.duration) => {
+	launchTimer = (duration = this.props.time) => {
 		timerAnimation = Animated.timing(percents, {
 			toValue: 0,
 			duration,
