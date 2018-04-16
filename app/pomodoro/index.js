@@ -28,19 +28,21 @@ class Goals extends Component {
 	};
 
     render() {
-    	const {state, stage, time, changePomodoroState, changePomodoroTime} = this.props;
+    	const {state, stage, time, changePomodoroState, changePomodoroTime, duration, isCurrentRoute} = this.props;
 
 		return (
             <View style={styles.container}>
 				<Text style={styles.title}>{stage}</Text>
 				<Text style={styles.subtitle}>Do some work effectively</Text>
-                <TimerCircle
+				<TimerCircle
 					time={time}
-                    instance={(timer) => timerRef = timer}
-                    onTimerFinished={this.onTimerFinished}
+					instance={(timer) => timerRef = timer}
+					onTimerFinished={this.onTimerFinished}
 					onTimerTick={changePomodoroTime}
 					onTimerStop={this.resetTimer}
-                />
+					duration={duration}
+					active={isCurrentRoute}
+				/>
                 <View style={styles.buttonsContainer}>
                     <TimerButtons
 						pomodoroState={state}
@@ -55,9 +57,9 @@ class Goals extends Component {
     }
 }
 
-const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {state, stage, time}}) => {
+const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {state, stage, time}, nav}) => {
 	let stageLength;
-
+	const currentRoute = nav.routes[nav.index];
 	switch (stage) {
 		case STAGES.WORK:
 			stageLength = pomodoroLength;
@@ -70,7 +72,9 @@ const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {st
 	return {
 		state,
 		stage,
-		time: time !== null ? time : stageLength
+		time: time !== null ? time : stageLength,
+		duration: stageLength,
+		isCurrentRoute: currentRoute.routeName === 'Pomodoro'
 	};
 };
 

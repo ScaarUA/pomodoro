@@ -7,16 +7,10 @@ import styles from './styles';
 const AnimatedProgressCircle = Animated.createAnimatedComponent(ProgressCircle);
 let timerAnimation;
 let timingInterval;
+let pausedDate;
+let percents = new Animated.Value(100);
 
 export default class TimerCircle extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			percents: new Animated.Value(100)
-		};
-	}
-
 	componentDidMount() {
 		this.props.instance({
 			start: this.launchTimer,
@@ -26,24 +20,45 @@ export default class TimerCircle extends Component {
 		AppState.addEventListener('change', this.onAppStateChange);
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps) {
 		if (this.props.time <= 0) {
 			this.stopTimer();
 			this.props.onTimerFinished();
 		}
+		if (this.props.active !== prevProps.active) {
+			if (!this.props.active) {
+				timingInterval && this.backupTimer();
+			} else {
+				pausedDate && this.restoreTimer();
+			}
+		}
+	}
+
+	componentWillUnmount() {
+		AppState.removeEventListener('change', this.onAppStateChange);
 	}
 
 	onAppStateChange = appState => {
-		if (!timingInterval) {
-			return;
+		if (appState === 'background' && timingInterval) {
+			this.backupTimer();
+		} else if (appState === 'active' && pausedDate) {
+			this.restoreTimer();
 		}
+	};
 
-		if (appState === 'background') {
-			this.pausedDate = new Date().getTime();
-		} else if (appState === 'active' && this.pausedDate) {
-			const difference = new Date().getTime() - this.pausedDate;
-			this.props.onTimerTick(this.props.time = difference);
-		}
+	backupTimer = () => {
+		this.pauseTimer();
+		pausedDate = new Date().getTime();
+	};
+
+	restoreTimer = () => {
+		const difference = new Date().getTime() - pausedDate;
+		const newTime = this.props.time - difference;
+		const newPercents = newTime * 100 / this.props.duration;
+
+		pausedDate = null;
+		percents.setValue(newPercents);
+		this.launchTimer(newTime);
 	};
 
 	pauseTimer = () => {
@@ -54,19 +69,19 @@ export default class TimerCircle extends Component {
 
 	stopTimer = () => {
 		this.pauseTimer();
-		this.state.percents.setValue(100);
+		percents.setValue(100);
 		this.props.onTimerStop();
 	};
 
-	launchTimer = () => {
-		timerAnimation = Animated.timing(this.state.percents, {
+	launchTimer = (duration = this.props.duration) => {
+		timerAnimation = Animated.timing(percents, {
 			toValue: 0,
-			duration: this.props.time,
-			easing: Easing.linear()
+			duration,
+			easing: Easing.linear
 		});
 		timerAnimation.start();
 
-		this.props.onTimerTick(this.props.time - 1000);
+		this.props.onTimerTick(duration - 1000);
 		timingInterval = setInterval(this.tickTimer, 1000);
 	};
 
@@ -86,7 +101,6 @@ export default class TimerCircle extends Component {
 	}
 
 	render() {
-		const {percents} = this.state;
 		const color = percents.interpolate({
 			inputRange: [0, 50, 100],
 			outputRange: ['rgb(255, 23, 68)', 'rgb(174, 163, 212)', 'rgb(51, 153, 255)']
@@ -118,6 +132,7 @@ export default class TimerCircle extends Component {
 
 TimerCircle.propTypes = {
 	time: PropTypes.number.isRequired,
+	duration: PropTypes.number.isRequired,
 	onTimerFinished: PropTypes.func,
 	onTimerTick: PropTypes.func,
 	onTimerStop: PropTypes.func,

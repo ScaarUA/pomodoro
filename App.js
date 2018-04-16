@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
-import {StyleSheet, StatusBar, View} from 'react-native';
+import {StyleSheet, StatusBar, View, YellowBox} from 'react-native';
 import {Provider} from 'react-redux';
 import {Font, Permissions} from 'expo';
 import store from './store';
 import AppNavigator from './app-navigator';
 import Drawer from './drawer';
 import {getSettings} from './app/settings/actions'
+
+YellowBox.ignoreWarnings([
+	'Warning: componentWillMount is deprecated',
+	'Warning: componentWillReceiveProps is deprecated',
+	'Warning: componentWillUpdate is deprecated'
+]);
 
 export default class App extends Component {
     constructor(props) {
