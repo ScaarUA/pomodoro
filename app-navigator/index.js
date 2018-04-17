@@ -24,7 +24,10 @@ export const Navigator = StackNavigator({
 }, {
     navigationOptions: () => ({
         header: ({scene}) => <Header title={scene.route.routeName} />
-    })
+    }),
+	cardStyle: {
+    	backgroundColor: '#ffffff'
+    }
 });
 
 const AppNavigator = ({dispatch, nav, dataLoaded}) => dataLoaded && (

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text} from 'react-native';
+import {ScrollView, View, Text} from 'react-native';
 import TimerCircle from './timer-circle/index';
 import {STAGES, STATES} from './constants';
 import styles from './styles';
@@ -31,7 +31,7 @@ class Goals extends Component {
     	const {state, stage, time, changePomodoroState, changePomodoroTime, duration, isCurrentRoute} = this.props;
 
 		return (
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.container}>
 				<Text style={styles.title}>{stage}</Text>
 				<Text style={styles.subtitle}>Do some work effectively</Text>
 				<TimerCircle
@@ -52,14 +52,14 @@ class Goals extends Component {
 						time={time}
 					/>
                 </View>
-            </View>
+			</ScrollView>
         );
     }
 }
 
 const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {state, stage, time}, nav}) => {
-	let stageLength;
 	const currentRoute = nav.routes[nav.index];
+	let stageLength;
 	switch (stage) {
 		case STAGES.WORK:
 			stageLength = pomodoroLength;

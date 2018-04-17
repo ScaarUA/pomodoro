@@ -2,19 +2,22 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
 	container: {
-		flex: 1,
 		alignItems: 'center',
-		backgroundColor: '#ffffff'
+		backgroundColor: '#ffffff',
+		paddingTop: 20,
+		paddingBottom: 20
 	},
 	buttonsContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		width: 200
+		width: 200,
 	},
 	title: {
-		fontSize: 18
+		fontSize: 18,
+		fontWeight: 'bold'
 	},
 	subtitle: {
-		fontSize: 14
+		fontSize: 14,
+		color: '#959595'
 	}
 });

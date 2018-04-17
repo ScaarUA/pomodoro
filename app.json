@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pomodoro",
     "icon": "./logo.png",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "slug": "pomodoro",
     "sdkVersion": "26.0.0",
     "android": {

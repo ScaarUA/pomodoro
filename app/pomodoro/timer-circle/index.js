@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Animated, Easing, AppState} from'react-native';
+import {View, Animated, Easing, AppState, Dimensions} from'react-native';
 import ProgressCircle from 'react-native-progress-circle';
-import styles from './styles';
+import styles, {circleHeight} from './styles';
 
+const {width: screenWidth} = Dimensions.get('window');
 const AnimatedProgressCircle = Animated.createAnimatedComponent(ProgressCircle);
 let timerAnimation;
 let timingInterval;
@@ -57,8 +58,13 @@ export default class TimerCircle extends Component {
 		const newPercents = newTime * 100 / this.props.duration;
 
 		pausedDate = null;
-		percents.setValue(newPercents);
-		this.launchTimer(newTime);
+		if (newTime <= 0) {
+			this.stopTimer();
+			this.props.onTimerFinished();
+		} else {
+			percents.setValue(newPercents);
+			this.launchTimer(newTime);
+		}
 	};
 
 	pauseTimer = () => {
@@ -115,7 +121,7 @@ export default class TimerCircle extends Component {
 			<View style={styles.container}>
 				<AnimatedProgressCircle
 					percent={percents}
-					radius={100}
+					radius={circleHeight / 2}
 					borderWidth={16}
 					color={color}
 					shadowColor="#eeeeee"
