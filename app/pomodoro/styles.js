@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
+import {theme} from '../../appConfig';
 
 export default StyleSheet.create({
 	container: {
 		alignItems: 'center',
-		backgroundColor: '#ffffff',
+		backgroundColor: theme.backgroundColor,
 		paddingTop: 20,
 		paddingBottom: 20
 	},
@@ -18,6 +19,6 @@ export default StyleSheet.create({
 	},
 	subtitle: {
 		fontSize: 14,
-		color: '#959595'
+		color: theme.secondaryTextColor
 	}
 });

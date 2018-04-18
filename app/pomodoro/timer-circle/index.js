@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {View, Animated, Easing, AppState, Dimensions} from'react-native';
 import ProgressCircle from 'react-native-progress-circle';
 import styles, {circleHeight} from './styles';
+import {theme} from '../../../appConfig';
 
 const {width: screenWidth} = Dimensions.get('window');
 const AnimatedProgressCircle = Animated.createAnimatedComponent(ProgressCircle);
@@ -125,7 +126,7 @@ export default class TimerCircle extends Component {
 					borderWidth={16}
 					color={color}
 					shadowColor="#eeeeee"
-					bgColor="#ffffff"
+					bgColor={theme.backgroundColor}
 				>
 					<Animated.Text style={[styles.innerText, {fontSize, color}]}>
 						{time}

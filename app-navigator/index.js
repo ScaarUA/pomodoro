@@ -6,6 +6,7 @@ import {createReactNavigationReduxMiddleware, createReduxBoundAddListener} from 
 import {addNavigationHelpers} from "react-navigation";
 import Header from '../header/index';
 import Settings from '../app/settings/index';
+import {theme} from '../appConfig';
 
 export const navigatorMiddleware = createReactNavigationReduxMiddleware(
     "root",
@@ -26,7 +27,7 @@ export const Navigator = StackNavigator({
         header: ({scene}) => <Header title={scene.route.routeName} />
     }),
 	cardStyle: {
-    	backgroundColor: '#ffffff'
+    	backgroundColor: theme.backgroundColor
     }
 });
 

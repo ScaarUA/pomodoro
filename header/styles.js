@@ -9,7 +9,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         height: 60,
-        backgroundColor: theme.headerColor,
+        backgroundColor: theme.mainColor,
         elevation: 3
     },
 

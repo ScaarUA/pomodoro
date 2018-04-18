@@ -6,6 +6,7 @@ import styles from './styles';
 import NavigationListItem from './navigation-list-item';
 import {Icons} from 'react-native-fontawesome';
 import {closeDrawer} from "../../actions";
+import HorizontalLine from '../../../shared/horizontal-line';
 
 
 class NavigationList extends Component {
@@ -42,6 +43,7 @@ class NavigationList extends Component {
                 >
                     Main
                 </NavigationListItem>
+                <HorizontalLine />
                 <NavigationListItem
                     icon={Icons.cog}
                     onPress={this.goToSettings}

@@ -1,4 +1,6 @@
 export const theme = {
-	headerColor: '#03A9F4',
-	textColor: '#000000'
+	mainColor: '#03A9F4',
+	textColor: '#000000',
+	secondaryTextColor: '#959595',
+	backgroundColor: '#ffffff'
 };

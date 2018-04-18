@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Picker, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {changeHeaderColor} from "../../header/actions";
 import {changeSettings} from './actions';
 import {connect} from 'react-redux';
-
-const pomodoroLengths = [0.5, 25, 30, 35, 40, 45];
-const breakLengths = [0.2, 5, 7.5, 10];
+import SettingsItem from './settings-item';
+import HorizontalLine from '../../shared/horizontal-line';
+import DurationControl from './duration-control';
 
 class Settings extends Component {
     componentDidMount() {
@@ -22,28 +22,26 @@ class Settings extends Component {
             setPomodoroLength, setBreakLength
         } = this.props;
 
-        return (
+		return (
             <View>
-                <Picker
-                    onValueChange={setPomodoroLength}
-                    selectedValue={pomodoroLength}
-                    style={{width: 150}}
-                    prompt="Pomodoro length"
-                >
-					{pomodoroLengths.map(length => (
-                        <Picker.Item key={length} label={`${length} minutes`} value={length * 60 * 1000} />
-					))}
-                </Picker>
-                <Picker
-                    onValueChange={setBreakLength}
-                    selectedValue={breakLength}
-                    style={{width: 150}}
-                    prompt="Break length"
-                >
-					{breakLengths.map(length => (
-                        <Picker.Item key={length} label={`${length} minutes`} value={length * 60 * 1000} />
-					))}
-                </Picker>
+                <SettingsItem name="Pomodoro duration" description="Set the duration of your work period">
+                    <DurationControl
+                        min={1}
+                        max={60}
+                        duration={pomodoroLength}
+                        onValueChange={setPomodoroLength}
+                    />
+                </SettingsItem>
+                <HorizontalLine />
+                <SettingsItem name="Break duration" description="Set the duration of your break period">
+                    <DurationControl
+                        min={1}
+                        max={20}
+                        duration={breakLength}
+                        onValueChange={setBreakLength}
+                    />
+                </SettingsItem>
+                <HorizontalLine />
             </View>
         );
     }
@@ -52,10 +50,10 @@ class Settings extends Component {
 const mapStateToProps = ({settings}) => settings;
 
 const mapDispatchToProps = dispatch => ({
-    setPomodoroLength: (length) => dispatch(changeSettings({
+    setPomodoroLength: length => dispatch(changeSettings({
         pomodoroLength: length
 	})),
-    setBreakLength: (length) => dispatch(changeSettings({
+    setBreakLength: length => dispatch(changeSettings({
         breakLength: length
 	}))
 });

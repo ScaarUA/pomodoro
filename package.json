@@ -23,6 +23,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-native": "^0.54.0",
+    "react-native-dialog-component": "^0.2.17",
     "react-native-fontawesome": "^5.7.0",
     "react-native-hamburger": "0.0.2",
     "react-native-progress-circle": "^2.0.0",
