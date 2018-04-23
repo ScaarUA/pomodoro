@@ -6,5 +6,6 @@ export const STATES = {
 
 export const STAGES = {
 	WORK: 'WORK',
-	BREAK: 'BREAK'
+	BREAK: 'BREAK',
+	LONG_BREAK: 'LONG_BREAK'
 };

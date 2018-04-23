@@ -7,6 +7,7 @@ import styles from './styles';
 import {changePomodoroState, changePomodoroStage, changePomodoroTime, incrementPomodoroIteration} from './actions';
 import TimerButtons from './timer-buttons';
 import IterationCounter from './iteration-counter';
+import {getLengthForStage} from './selectors';
 
 let timerRef;
 
@@ -24,18 +25,25 @@ class Goals extends Component {
 
         switch (stage) {
 			case STAGES.WORK:
-				changePomodoroStage(STAGES.BREAK);
-				break;
-			case STAGES.BREAK:
 				incrementPomodoroIteration();
+				changePomodoroStage(this.shouldHaveLongBreak() ? STAGES.LONG_BREAK : STAGES.BREAK);
+				break;
+			case STAGES.LONG_BREAK:
+			case STAGES.BREAK:
 				changePomodoroStage(STAGES.WORK);
-
+				break;
 		}
     };
 
 	resetTimer = () => {
 		this.props.changePomodoroTime(null);
 	};
+
+	shouldHaveLongBreak() {
+		const {iteration, longBreakAfter} = this.props;
+
+		return iteration + 1 === longBreakAfter;
+	}
 
     render() {
     	const {
@@ -70,26 +78,20 @@ class Goals extends Component {
     }
 }
 
-const mapStateToProps = ({settings: {pomodoroLength, breakLength, pomodorosPerDay}, pomodoro: {state, stage, time, iteration}, nav}) => {
+const mapStateToProps = (state) => {
+	const {settings, pomodoro, nav} = state;
 	const currentRoute = nav.routes[nav.index];
-	let stageLength;
-	switch (stage) {
-		case STAGES.WORK:
-			stageLength = pomodoroLength;
-			break;
-		case STAGES.BREAK:
-			stageLength = breakLength;
-			break;
-	}
+	const stageLength = getLengthForStage(state);
 
 	return {
-		state,
-		stage,
-		time: time !== null ? time : stageLength,
-		iteration,
+		state: pomodoro.state,
+		stage: pomodoro.stage,
+		time: pomodoro.time !== null ? pomodoro.time : stageLength,
+		iteration: pomodoro.iteration,
 		duration: stageLength,
 		isCurrentRoute: currentRoute.routeName === 'Pomodoro',
-		pomodorosPerDay
+		pomodorosPerDay: settings.pomodorosPerDay,
+		longBreakAfter: settings.longBreakAfter
 	};
 };
 

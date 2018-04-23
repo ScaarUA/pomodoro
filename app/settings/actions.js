@@ -16,7 +16,7 @@ export const getSettings = () => dispatch => {
 		.then(settings => {
 			const parsedSettings = JSON.parse(settings || defaultState);
 
-			dispatch(changeSettings(parsedSettings))
+			dispatch(changeSettings({...defaultState, ...parsedSettings}))
 		})
 		.catch(() => {
 			dispatch(changeSettings(defaultState))
