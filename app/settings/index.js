@@ -5,7 +5,7 @@ import {changeSettings} from './actions';
 import {connect} from 'react-redux';
 import SettingsItem from './settings-item';
 import HorizontalLine from '../../shared/horizontal-line';
-import DurationControl from './duration-control';
+import AmountControl from './amount-control';
 
 class Settings extends Component {
     componentDidMount() {
@@ -18,30 +18,46 @@ class Settings extends Component {
 
     render() {
         const {
-            pomodoroLength, breakLength,
-            setPomodoroLength, setBreakLength
+            pomodoroLength, breakLength, pomodorosPerDay,
+            setPomodoroLength, setBreakLength, setPomodorosPerDay
         } = this.props;
 
 		return (
             <View>
                 <SettingsItem name="Pomodoro duration" description="Set the duration of your work period">
-                    <DurationControl
+                    <AmountControl
                         min={1}
                         max={60}
-                        duration={pomodoroLength}
+                        multiplier={60 * 1000}
+                        step={1}
+                        prefix="minutes"
+                        value={pomodoroLength}
                         onValueChange={setPomodoroLength}
                     />
                 </SettingsItem>
                 <HorizontalLine />
                 <SettingsItem name="Break duration" description="Set the duration of your break period">
-                    <DurationControl
+                    <AmountControl
                         min={1}
                         max={20}
-                        duration={breakLength}
+                        multiplier={60 * 1000}
+                        step={1}
+                        prefix="minutes"
+                        value={breakLength}
                         onValueChange={setBreakLength}
                     />
                 </SettingsItem>
                 <HorizontalLine />
+                <SettingsItem name="Pomodoros per day" description="Choose amount of pomodoros you wish to accomplish per day">
+                    <AmountControl
+                        min={1}
+                        max={20}
+                        step={1}
+                        prefix="pomodoro(s)"
+                        value={pomodorosPerDay}
+                        onValueChange={setPomodorosPerDay}
+                    />
+                </SettingsItem>
             </View>
         );
     }
@@ -50,12 +66,9 @@ class Settings extends Component {
 const mapStateToProps = ({settings}) => settings;
 
 const mapDispatchToProps = dispatch => ({
-    setPomodoroLength: length => dispatch(changeSettings({
-        pomodoroLength: length
-	})),
-    setBreakLength: length => dispatch(changeSettings({
-        breakLength: length
-	}))
+    setPomodoroLength: pomodoroLength => dispatch(changeSettings({pomodoroLength})),
+    setBreakLength: breakLength => dispatch(changeSettings({breakLength})),
+    setPomodorosPerDay: pomodorosPerDay => dispatch(changeSettings({pomodorosPerDay}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

@@ -4,8 +4,9 @@ import {ScrollView, View, Text} from 'react-native';
 import TimerCircle from './timer-circle/index';
 import {STAGES, STATES} from './constants';
 import styles from './styles';
-import {changePomodoroState, changePomodoroStage, changePomodoroTime} from './actions';
+import {changePomodoroState, changePomodoroStage, changePomodoroTime, incrementPomodoroIteration} from './actions';
 import TimerButtons from './timer-buttons';
+import IterationCounter from './iteration-counter';
 
 let timerRef;
 
@@ -17,10 +18,19 @@ class Goals extends Component {
 	}
 
 	onTimerFinished = () => {
-        const {stage, changePomodoroState, changePomodoroStage} = this.props;
+        const {stage, changePomodoroState, changePomodoroStage, incrementPomodoroIteration} = this.props;
 
         changePomodoroState(STATES.STOPPED);
-        changePomodoroStage(stage === STAGES.WORK ? STAGES.BREAK : STAGES.WORK);
+
+        switch (stage) {
+			case STAGES.WORK:
+				changePomodoroStage(STAGES.BREAK);
+				break;
+			case STAGES.BREAK:
+				incrementPomodoroIteration();
+				changePomodoroStage(STAGES.WORK);
+
+		}
     };
 
 	resetTimer = () => {
@@ -28,7 +38,10 @@ class Goals extends Component {
 	};
 
     render() {
-    	const {state, stage, time, changePomodoroState, changePomodoroTime, duration, isCurrentRoute} = this.props;
+    	const {
+    		state, stage, time, iteration, duration, isCurrentRoute, pomodorosPerDay,
+			changePomodoroState, changePomodoroTime
+    	} = this.props;
 
 		return (
             <ScrollView contentContainerStyle={styles.container}>
@@ -43,21 +56,21 @@ class Goals extends Component {
 					duration={duration}
 					active={isCurrentRoute}
 				/>
-                <View style={styles.buttonsContainer}>
-                    <TimerButtons
-						pomodoroState={state}
-						pomodoroStage={stage}
-						changeTimerState={changePomodoroState}
-						getTimer={() => timerRef}
-						time={time}
-					/>
-                </View>
+				<TimerButtons
+					pomodoroState={state}
+					pomodoroStage={stage}
+					changeTimerState={changePomodoroState}
+					getTimer={() => timerRef}
+					time={time}
+				/>
+				<Text style={styles.title}>COMPLETED POMODOROS</Text>
+				<IterationCounter amountOfIterations={iteration} pomodorosPerDay={pomodorosPerDay} />
 			</ScrollView>
         );
     }
 }
 
-const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {state, stage, time}, nav}) => {
+const mapStateToProps = ({settings: {pomodoroLength, breakLength, pomodorosPerDay}, pomodoro: {state, stage, time, iteration}, nav}) => {
 	const currentRoute = nav.routes[nav.index];
 	let stageLength;
 	switch (stage) {
@@ -73,8 +86,10 @@ const mapStateToProps = ({settings: {pomodoroLength, breakLength}, pomodoro: {st
 		state,
 		stage,
 		time: time !== null ? time : stageLength,
+		iteration,
 		duration: stageLength,
-		isCurrentRoute: currentRoute.routeName === 'Pomodoro'
+		isCurrentRoute: currentRoute.routeName === 'Pomodoro',
+		pomodorosPerDay
 	};
 };
 
@@ -82,6 +97,7 @@ const mapDispatchToProps = dispatch => ({
 	changePomodoroState: state => dispatch(changePomodoroState(state)),
 	changePomodoroStage: stage => dispatch(changePomodoroStage(stage)),
 	changePomodoroTime: time => dispatch(changePomodoroTime(time)),
+	incrementPomodoroIteration: () => dispatch(incrementPomodoroIteration()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Goals);

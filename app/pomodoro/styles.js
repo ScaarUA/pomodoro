@@ -8,11 +8,6 @@ export default StyleSheet.create({
 		paddingTop: 20,
 		paddingBottom: 20
 	},
-	buttonsContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		width: 200,
-	},
 	title: {
 		fontSize: 18,
 		fontWeight: 'bold'

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {Slider, Text, View} from 'react-native';
 import styles from './styles';
 import {theme} from '../../../appConfig';
@@ -9,18 +10,18 @@ export default class DurationControl extends Component {
 		super(props);
 
 		this.state = {
-			duration: props.duration
+			value: props.value
 		};
 	}
 
 	changeValue = value => {
 		this.setState({
-			duration: value
+			value: value
 		});
 	};
 
 	dismissModal = () => {
-		this.props.onValueChange(this.props.duration);
+		this.props.onValueChange(this.props.value);
 		this.closeModal();
 	};
 
@@ -29,12 +30,12 @@ export default class DurationControl extends Component {
 	}
 
 	get formattedDuration() {
-		return `${this.state.duration / 60 / 1000} minute(s)`;
+		return `${this.state.value / this.props.multiplier} ${this.props.prefix}`;
 	}
 
 	render() {
 		const {
-			min, max,
+			min, max, multiplier, step, value,
 			onValueChange
 		} = this.props;
 
@@ -45,10 +46,10 @@ export default class DurationControl extends Component {
 				</View>
 				<Slider
 					style={styles.slider}
-					value={this.props.duration}
-					minimumValue={min * 60 * 1000}
-					maximumValue={max * 60 * 1000}
-					step={60 * 1000}
+					value={value}
+					minimumValue={min * multiplier}
+					maximumValue={max * multiplier}
+					step={step * multiplier}
 					onValueChange={this.changeValue}
 					onSlidingComplete={onValueChange}
 					minimumTrackTintColor={theme.mainColor}
@@ -63,3 +64,22 @@ export default class DurationControl extends Component {
 		);
 	}
 }
+
+DurationControl.propTypes = {
+	multiplier: PropTypes.number,
+	min: PropTypes.number,
+	max: PropTypes.number,
+	onValueChange: PropTypes.func,
+	value: PropTypes.number,
+	prefix: PropTypes.string,
+	step: PropTypes.number
+};
+
+DurationControl.defaultProps = {
+	multiplier: 1,
+	min: 0,
+	max: 100,
+	onValueChange: () => {},
+	prefix: '',
+	step: 1
+};
