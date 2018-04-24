@@ -18,15 +18,17 @@ class Goals extends Component {
 		}
 	}
 
-	onTimerFinished = () => {
+	goToNextStage = (wasSkipped) => {
         const {stage, changePomodoroState, changePomodoroStage, incrementPomodoroIteration} = this.props;
 
         changePomodoroState(STATES.STOPPED);
 
         switch (stage) {
 			case STAGES.WORK:
-				incrementPomodoroIteration();
-				changePomodoroStage(this.shouldHaveLongBreak() ? STAGES.LONG_BREAK : STAGES.BREAK);
+				if (!wasSkipped) {
+					incrementPomodoroIteration();
+				}
+				changePomodoroStage(!wasSkipped && this.shouldHaveLongBreak() ? STAGES.LONG_BREAK : STAGES.BREAK);
 				break;
 			case STAGES.LONG_BREAK:
 			case STAGES.BREAK:
@@ -42,7 +44,7 @@ class Goals extends Component {
 	shouldHaveLongBreak() {
 		const {iteration, longBreakAfter} = this.props;
 
-		return iteration + 1 === longBreakAfter;
+		return iteration + 1 % longBreakAfter === 0;
 	}
 
     render() {
@@ -58,7 +60,7 @@ class Goals extends Component {
 				<TimerCircle
 					time={time}
 					instance={(timer) => timerRef = timer}
-					onTimerFinished={this.onTimerFinished}
+					onTimerFinished={this.goToNextStage}
 					onTimerTick={changePomodoroTime}
 					onTimerStop={this.resetTimer}
 					duration={duration}
@@ -68,6 +70,7 @@ class Goals extends Component {
 					pomodoroState={state}
 					pomodoroStage={stage}
 					changeTimerState={changePomodoroState}
+					onSkip={this.goToNextStage}
 					getTimer={() => timerRef}
 					time={time}
 				/>

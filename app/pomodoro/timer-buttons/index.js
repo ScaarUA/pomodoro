@@ -15,9 +15,10 @@ export default class TimerButtons extends Component {
 		this.scheduleNotification();
 	};
 
-	stopTimer = () => {
+	skipTimer = () => {
 		this.props.getTimer().stop();
 		this.props.changeTimerState(STATES.STOPPED);
+		this.props.onSkip(true);
 		this.cancelNotification();
 	};
 
@@ -89,8 +90,8 @@ export default class TimerButtons extends Component {
 				)}
 				{this.showStopButton() && (
 					<Button
-						onPress={this.stopTimer}
-						title="stop"
+						onPress={this.skipTimer}
+						title="skip"
 						color="#ff1744"
 					/>
 				)}
@@ -103,5 +104,6 @@ TimerButtons.propTypes = {
 	getTimer: PropTypes.func.isRequired,
 	pomodoroStage: PropTypes.string.isRequired,
 	pomodoroState: PropTypes.string.isRequired,
-	changeTimerState: PropTypes.func.isRequired
+	changeTimerState: PropTypes.func.isRequired,
+	onSkip: PropTypes.func.isRequired,
 };

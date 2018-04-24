@@ -65,7 +65,7 @@ class Settings extends Component {
                         min={1}
                         max={20}
                         step={1}
-                        prefix="minute(s)"
+                        prefix="pomodoro(s)"
                         value={longBreakAfter}
                         onValueChange={setLongBreakAfter}
                     />
